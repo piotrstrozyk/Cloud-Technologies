@@ -1,3 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/gtp0On7_)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=13962952&assignment_repo_type=AssignmentRepo)
-# TechnologieChmuroweTemplate
+## Cloud technology project 
+The project sets up a forum application for a sample company utilizing Kubernetes and Docker. The application is divided into three main components: a frontend, a backend, and a MongoDB database. Each of these components is containerized with Docker and orchestrated using Kubernetes deployments, services, and persistent volume claims. To ensure scalability based on resource demand, horizontal pod autoscalers are implemented for both the frontend and backend. The entire infrastructure is described using YAML configuration files, with a Docker Compose file provided for local development.
+
+Reference ```main.pdf``` file for further details on architecture.
