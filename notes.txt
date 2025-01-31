@@ -1,0 +1,19 @@
+kubectl port-forward svc/frontend 3000:3000 -n myforum-namespace
+
+kubectl port-forward svc/backend 4000:4000 -n myforum-namespace 
+
+
+kubectl get pods -n myforum-namespace 
+kubectl get services -n myforum-namespace 
+kubectl get deployments -n myforum-namespace
+
+
+kubectl get networkpolicy -n myforum-namespace 
+
+kubectl rollout restart deployment/frontend -n myforum-namespace 
+
+kubectl get hpa -n myforum-namespace         
+
+kubectl apply -f frontend-autoscaler.yaml -n myforum-namespace  
+
+kubectl get svc -n myforum-namespace 

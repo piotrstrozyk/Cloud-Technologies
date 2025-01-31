@@ -1,0 +1,698 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{dsfont} 
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[top=1in, bottom=1.5in, left=1.25in, right=1.25in]{geometry}
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{multicol}
+\graphicspath{{/}}
+\usepackage{xcolor,colortbl}
+\usepackage{float}
+
+\newcommand \comment[1]{\textbf{\textcolor{red}{#1}}}
+
+%\usepackage{float}
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{indentfirst}
+\usepackage{placeins}
+\usepackage{scalefnt}
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{framed}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{HTML}{C42043}
+\definecolor{backcolour}{HTML}{F2F2F2}
+\definecolor{bookColor}{cmyk}{0,0,0,0.90}  
+\color{bookColor}
+
+\lstset{upquote=true}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{codepurple},
+	numberstyle=\numberstyle,
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize\ttfamily,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=10pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+}
+\lstset{style=mystyle}
+
+\newcommand\numberstyle[1]{%
+	\footnotesize
+	\color{codegray}%
+	\ttfamily
+	\ifnum#1<10 0\fi#1 |%
+}
+
+\definecolor{shadecolor}{HTML}{F2F2F2}
+
+\newenvironment{sqltable}%
+{\snugshade\verbatim}%
+{\endverbatim\endsnugshade}
+
+% Margins
+\addtolength{\footskip}{0cm}
+\addtolength{\textwidth}{1.4cm}
+\addtolength{\oddsidemargin}{-.7cm}
+
+\addtolength{\textheight}{1.6cm}
+%\addtolength{\topmargin}{-2cm}
+
+% paragrafo
+\addtolength{\parskip}{.2cm}
+
+% Set up the header and footer
+\pagestyle{fancy}
+\rhead{\hmwkAuthorName} % Top left header
+\lhead{\hmwkClass: \hmwkTitle} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{Piotr Stróżyk} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{} % Bottom right footer
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+    
+\newcommand{\hmwkTitle}{Konfiguracja klastra obliczeniowego dla aplikacji typu forum} % Tytuł projektu
+\newcommand{\hmwkDueDate}{\today} % Data 
+\newcommand{\hmwkClass}{Technologie chmurowe} % Nazwa przedmiotu
+\newcommand{\hmwkAuthorName}{Piotr Stróżyk} % Imię i nazwisko
+
+% trabalho 
+\begin{document}
+% capa
+\begin{titlepage}
+    \vfill
+	\begin{center}
+	\hspace*{-1cm}
+	\vspace*{0.5cm}
+    \includegraphics[scale=0.55]{loga.png}\\
+	\textbf{Uniwersytet Gdański \\ [0.05cm]Wydział Matematyki, Fizyki i Informatyki \\ [0.05cm] Instytut Informatyki}
+
+	\vspace{0.6cm}
+	\vspace{4cm}
+	{\huge \textbf{\hmwkTitle}}\vspace{8mm}
+	
+	{\large \textbf{\hmwkAuthorName}}\\[3cm]
+	
+		\hspace{.45\textwidth} %posiciona a minipage
+	   \begin{minipage}{.5\textwidth}
+	   Projekt z przedmiotu technologie chmurowe na kierunku informatyka profil praktyczny na Uniwersytecie Gdańskim.\\[0.1cm]
+	  \end{minipage}
+	  \vfill
+	%\vspace{2cm}
+	
+	\textbf{Gdańsk}
+	
+	\textbf{\hmwkDueDate}
+	\end{center}
+	
+\end{titlepage}
+
+\newpage
+\setcounter{secnumdepth}{5}
+\tableofcontents
+\newpage
+
+\section{Opis projektu}
+\label{sec:Project}
+
+Firma TechForum Inc., dynamicznie rozwijająca się w branży technologicznej, zauważyła rosnącą potrzebę stworzenia platformy umożliwiającej wymianę wiedzy oraz doświadczeń między specjalistami IT. W odpowiedzi na tę potrzebę, powstał projekt MyForum – nowoczesna aplikacja forumowa.
+
+ForumConnect to prosta, lecz funkcjonalna aplikacja oparta na technologii vite-react, z backendem zbudowanym na expressie oraz bazą danych mongodb. Głównym celem projektu jest stworzenie intuicyjnej i przyjaznej dla użytkownika platformy, na której profesjonaliści z branży IT mogą zadawać pytania, udzielać odpowiedzi oraz prowadzić dyskusje na tematy związane z technologią. Dzięki zastosowaniu nowoczesnych technologii, aplikacja jest szybka, responsywna i łatwa w utrzymaniu.
+
+Projekt ma na celu zaspokojenie rosnącego zapotrzebowania na wysokiej jakości fora tematyczne, wspierające rozwój zawodowy i wymianę wiedzy między specjalistami IT na całym świecie.
+
+\subsection{Opis architektury - 8 pkt}
+\label{sec:introduction}
+Architektura aplikacji ForumConnect opiera się na Kubernetes, co umożliwia zarządzanie klastrem kontenerów w sposób efektywny i skalowalny. 
+
+Klastry Kubernetes to zestaw węzłów, które uruchamiają aplikacje konteneryzowane. Konteneryzacja aplikacji pakuje aplikację z jej zależnościami i niezbędnymi usługami. Są one lżejsze i bardziej elastyczne niż maszyny wirtualne. W ten sposób klastry Kubernetes pozwalają na łatwiejsze rozwijanie, przenoszenie i zarządzanie aplikacjami.
+Konteneryzacja to proces wdrażania i uruchamiania oprogramowania, który łączy kod aplikacji ze wszystkimi plikami i bibliotekami potrzebnymi do jej uruchomienia na dowolnej infrastrukturze. Kubernetes to otwartoźródłowe oprogramowanie do orkiestracji kontenerów, za pomocą którego można zarządzać, koordynować i planować kontenery na dużą skalę. Kubernetes umieszcza kontenery w podach i uruchamia je na węzłach. Klastr Kubernetes ma, co najmniej, węzeł główny uruchamiający pod kontenera oraz płaszczyznę sterowania, która zarządza klastrem. \cite{aws.amazon}
+
+Klastr Kubernetes dla tej aplikacji wdraża trzy mikroserwisy.
+\subsubsection{Backend}
+Deployment backendu uruchamia jedną instancję aplikacji backendowej dla forum, która komunikuje się z bazą danych MongoDB (adres bazy danych jest przekazywany przez zmienną środowiskową). Deployment monitoruje zdrowie aplikacji za pomocą sond i zarządza zasobami, które aplikacja może zużywać.
+
+Service backendu umożliwia innym podom w klastrze (oraz potencjalnie zewnętrznym klientom, w zależności od typu Service) komunikację z podami aplikacji backendowej na porcie 4000, używając protokołu TCP. Dzięki temu, niezależnie od tego, na których konkretnych podach działa aplikacja backendowa, ruch może być kierowany do nich przez stały punkt dostępu, którym jest ten Service. \cite{kuber.docs}
+
+HPA backendu (HorizontalPodAutoscaler) automatycznie zwiększa lub zmniejsza liczbę podów w Deployment backend w zależności od obciążenia CPU, utrzymując średnie wykorzystanie CPU na poziomie 50 procent. Dzięki temu aplikacja może elastycznie reagować na zmieniające się warunki obciążenia, zapewniając odpowiednią wydajność przy optymalnym wykorzystaniu zasobów.
+
+\begin{verbatim}
+    apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: myforum-namespace
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: pstrozyk644365/viteforum-backend:latest
+          ports:
+            - containerPort: 4000
+          env:
+            - name: MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config
+                  key: MONGO_URL
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+\end{verbatim}
+
+\begin{verbatim}
+_______________________
+    apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: myforum-namespace
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+\end{verbatim}
+\subsubsection{Frontend}
+Deployment frontendu uruchamia jedną instancję aplikacji frontendowej dla forum, która jest dostępna na porcie 3000. Deployment monitoruje zdrowie aplikacji za pomocą sond i zarządza zasobami, które aplikacja może zużywać.
+
+Service frontendu w Kubernetes umożliwia dostęp do aplikacji frontendowej z internetu na porcie 3000, używając protokołu TCP. Dzięki typowi LoadBalancer, ruch z zewnątrz jest automatycznie przekierowywany do podów aplikacji, które pasują do określonego selektora etykiet.
+
+HorizontalPodAutoscaler (HPA) dla frontendu automatycznie skaluje liczbę podów w Deployment o nazwie frontend w przestrzeni nazw myforum-namespace, w zależności od wykorzystania CPU przez te pody.
+
+\begin{verbatim}
+    apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: myforum-namespace
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: pstrozyk644365/viteforum-frontend:latest
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+______________________________
+\end{verbatim}
+
+\begin{verbatim}
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: myforum-namespace
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+\end{verbatim}
+
+\subsubsection{Baza Danych}
+
+Deployment uruchamia MongoDB w pojedynczym pode w przestrzeni nazw myforum-namespace, eksponując go na porcie 27017 i korzystając z trwałego woluminu (Persistent Volume Claim) do przechowywania danych, co zapewnia trwałość danych bazy.
+
+Service bazy danych umożliwia dostęp do aplikacji MongoDB z innych podów w klastrze (lub z zewnątrz, w zależności od konfiguracji sieci i typu Service) na porcie 27017, używając protokołu TCP.
+
+PersistentVolumeClaim jest żądaniem o alokację 1GB przestrzeni dyskowej, która może być podłączona do jednego węzła na raz (tryb ReadWriteOnce) w przestrzeni nazw myforum-namespace. PVC jest często używany do przechowywania danych w aplikacjach, które wymagają trwałości danych poza cyklem życia podów, takich jak bazy danych. W tym przypadku, może być używany do przechowywania danych MongoDB.
+
+\begin{verbatim}
+    apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: myforum-namespace
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+
+_________________________________________
+\end{verbatim}
+
+\begin{verbatim}
+    apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: myforum-namespace
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+\end{verbatim}
+
+\begin{verbatim}
+    apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+  namespace: myforum-namespace
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+\end{verbatim}
+
+\subsection{Opis infrastruktury - 6 pkt}
+\label{sec:Users}
+
+Infrastruktura dla aplikacji jest zbudowana w oparciu o platformę Kubernetes z użyciem Minikube, która zarządza wdrażaniem i skalowaniem aplikacji w klastrze. Aplikacja będzie działać w wyizolowanym środowisku zwanym namespace o nazwie myforum-namespace. W ramach tego namespace zostały zdefiniowane i wdrożone następujące komponenty:
+\begin{enumerate}
+    \item Deploymenty
+    \begin{itemize}
+    \item Backend Deployment
+        \begin{itemize}
+        \item Nazwa: backend
+        \item Liczba replik: Początkowo jedna, z możliwością skalowania do maksymalnie pięciu replik dzięki konfiguracji Horizontal Pod Autoscaler.
+        \item Obraz Docker: pstrozyk644365/viteforum-backend:latest przechowywany w Docker Hub
+        \item Zasoby:
+                \begin{itemize}
+                \item Limit pamięci: 512Mi
+                \item Limit CPU: 500m
+                \item  Zasoby żądane: 256Mi pamięci, 250m CPU
+                \end{itemize}
+        \item Probes:
+                \begin{itemize}
+                \item Liveness Probe: Sprawdza zdrowie podu co 10 sekund, po 30 sekundach od uruchomienia.
+                \item Readiness Probe: Sprawdza gotowość do obsługi żądań co 5 sekund, po 10 sekundach od uruchomienia.
+                \item  Zasoby żądane: 256Mi pamięci, 250m CPU
+                \end{itemize}
+        \item Zmienne środowiskowe: URL do MongoDB pobierany z ConfigMap.
+        \end{itemize}
+
+
+        
+        \item Frontend Deployment
+                          \begin{itemize}
+                \item Nazwa: frontend
+                \item Liczba replik: Jedna
+                \item Obraz Docker: pstrozyk644365/viteforum-frontend:latest
+                        \item Zasoby:
+                \begin{itemize}
+                \item Limit pamięci: 512Mi
+                \item Limit CPU: 500m
+                \item  Zasoby żądane: 256Mi pamięci, 250m CPU
+                \end{itemize}
+        \item Probes:
+                \begin{itemize}
+                \item Liveness Probe: Sprawdza zdrowie podu co 10 sekund, po 30 sekundach od uruchomienia.
+                \item Readiness Probe: Sprawdza gotowość do obsługi żądań co 5 sekund, po 10 sekundach od uruchomienia.
+                \item  Zasoby żądane: 256Mi pamięci, 250m CPU
+                \end{itemize}
+                \end{itemize}
+        \item MongoDB Deployment
+                                         \begin{itemize}
+                \item Nazwa: mongo
+                \item Liczba replik: Jedna
+                \item Obraz Docker: mongo:latest
+                 \item       Pamięć masowa: Używa PersistentVolumeClaim (PVC) do przechowywania danych z dostępem ReadWriteOnce i rozmiarem 1Gi.
+                \end{itemize}
+    \end{itemize}
+    \item Horizontal Pod Autoscaler (HPA)
+            \begin{itemize}
+                \item Nazwa: backend-autoscaler
+                \item Zakres replik: od 1 do 5
+                \item Metryka skalowania: Wykorzystanie CPU na poziomie 50 procent
+            \end{itemize}
+    \item ConfigMap
+                   \begin{itemize}
+                \item Nazwa: mongo-config
+                \item Dane: URL do MongoDB (MONGO\_URL)
+
+            \end{itemize}
+    \item PersistentVolumeClaim (PVC)
+                        \begin{itemize}
+                \item Nazwa: mongo-pvc
+                \item Dostęp: ReadWriteOnce
+                \item Rozmiar: 1Gi
+
+            \end{itemize}
+    \item Serwisy
+                                  \begin{itemize}
+                \item Backend Service
+                                            \begin{itemize}
+                \item Nazwa: backend
+                \item Typ: ClusterIP
+                \item Port: 4000
+                \item Selector: app: backend
+
+            \end{itemize}
+                \item Frontend Service
+                       \begin{itemize}
+                \item Nazwa: frontend
+                \item Typ: LoadBalancer
+                \item Port: 3000
+                \item Selector: app: frontend
+
+            \end{itemize}
+                \item MongoDB Service
+                \begin{itemize}
+                \item Nazwa: mongo
+                \item Typ: ClusterIP
+                \item Port: 27017
+                \item Selector: app: mongo
+
+            \end{itemize}
+
+            \end{itemize}
+
+\item Wykorzystane narzędzia i platformy chmurowe
+
+Aplikacja wykorzystuje Kubernetes do orkiestracji kontenerów, zapewniając wysoką dostępność, skalowalność i zarządzanie zasobami. Podstawowe elementy infrastruktury obejmują:
+
+    Namespace: Izolacja środowiska aplikacji. \newline
+    Deployments: Zarządzanie wdrażaniem kontenerów aplikacji. \newline
+    Services: Umożliwiają komunikację między komponentami aplikacji oraz dostęp zewnętrzny (w przypadku Frontendu). \newline
+    ConfigMap: Przechowywanie konfiguracji aplikacji. \newline
+    PersistentVolumeClaim: Zarządzanie trwałą pamięcią masową dla MongoDB.
+
+\item Zasoby sieciowe i pamięci masowej
+
+    Sieci: Używane do komunikacji między usługami i podami w klastrze Kubernetes.
+    Pamięć masowa: PersistentVolumeClaim dla MongoDB zapewnia trwałą pamięć masową o rozmiarze 1Gi, umożliwiając przechowywanie danych niezależnie od cyklu życia podów.
+\end{enumerate}
+\subsection{Opis komponentów aplikacji - 8 pkt}
+\label{sec:FunctionalConditions}
+
+Backend obsługuje logikę aplikacji oraz interakcje z bazą danych. Jest zbudowany na obrazie Docker pstrozyk644365/viteforum-backend:latest. Uruchamia serwer HTTP z wykorzystaniem frameworka Express.js, który obsługuje różne żądania API dla aplikacji forum internetowego.
+Importuje niezbędne moduły takie jak Express, CORS (Cross-Origin Resource Sharing), Mongoose (do obsługi MongoDB), oraz modele użytkownika (User) i wątku (Thread).
+Ustawia serwer Express, włącza obsługę danych formularza i JSON, oraz konfiguruje CORS.
+Nawiązuje połączenie z bazą danych MongoDB pod adresem mongodb://mongo:27017/viteForum.
+Skrypt uruchamia serwer forum internetowego, który umożliwia rejestrację i logowanie użytkowników, tworzenie wątków i odpowiedzi, polubienie wątków oraz pobieranie listy wątków i ich odpowiedzi. Dane są przechowywane w bazie danych MongoDB, a komunikacja z serwerem odbywa się za pomocą żądań HTTP.
+\newline
+\\
+Frontend używa BrowserRouter z biblioteki react-router-dom do obsługi nawigacji i trasowania w aplikacji jednostronicowej (SPA). Wewnątrz BrowserRouter, Routes definiuje różne ścieżki (routes), które aplikacja może obsłużyć, i przypisuje do nich konkretne komponenty, które mają być renderowane, gdy użytkownik nawiguje do danej ścieżki. Oparty jest na vite-react, ponieważ Vite wykorzystuje natywne moduły ES do serwowania kodu, co znacząco przyspiesza czas ładowania w trakcie rozwoju projektu. Dzięki temu zmiany w kodzie są widoczne niemal natychmiastowo. Vite łatwo integruje się z innymi narzędziami i bibliotekami używanymi w projektach React, takimi jak Redux, React Router czy styled-components, co sprawia, że jest wszechstronnym wyborem dla deweloperów.
+\newline
+\\
+MongoDB to nierelacyjna baza danych typu NoSQL, która przechowuje dane w formacie podobnym do JSON, znanym jako BSON (Binary JSON). Jest to rozwiązanie zaprojektowane z myślą o skalowalności, wydajności i łatwości użycia. MongoDB umożliwia przechowywanie złożonych struktur danych, takich jak dokumenty, które mogą zawierać różne typy danych i zagnieżdżone listy. Baza danych ta jest często wykorzystywana w aplikacjach internetowych i mobilnych ze względu na swoją elastyczność i wydajność przy obsłudze dużych ilości danych oraz zapytań. \newline
+MongoDB jest wdrażany za pomocą Mongoose, biblioteki ODM (Object Data Modeling) dla MongoDB w środowisku Node.js Mongoose automatycznie obsługuje walidację danych na podstawie zdefiniowanego schematu. Schematy i Modele umożliwiają organizację i zarządzanie strukturą danych aplikacji. Dzięki temu kod jest bardziej modularny i łatwiejszy w utrzymaniu.
+
+
+\subsection{Konfiguracja i zarządzanie - 4 pkt}
+\label{sec:NonFunctionalConditions}
+
+W Kubernetes Namespaces zapewniają mechanizm izolacji grup zasobów w ramach pojedynczego klastra. Namespaces są przeznaczone do użytku w środowiskach z wieloma użytkownikami rozproszonymi między różnymi zespołami lub projektami. Namespaces definiują zakres nazw. Nazwy zasobów muszą być unikalne w obrębie jedngo namespace, ale nie muszą być unikalne w obrębie globalnym. Namespaces nie mogą być zagnieżdżane w sobie nawzajem, a każdy zasób Kubernetes może należeć tylko do jednej. \href{https://github.com/rohitg00/DevOps_Books/blob/main/The%20Kubernetes%20Book%20(Nigel%20Poulton)%20(z-lib.org).pdf}{Kubernetes} \cite{KubernetBook}
+
+Namespaces są sposobem na podział zasobów klastra między wielu użytkowników. Ten projekt na ten moment jest niewielki, a więc został w nim użyty tylko jeden namespace myforum-namespace aby w przyszłości ułatwić izolacje zasobów aplikacji, co umożliwi łatwiejsze zarządzanie i organizację.
+\begin{verbatim}
+    apiVersion: v1
+kind: Namespace
+metadata:
+  name: myforum-namespace
+
+\end{verbatim}
+\\
+ConfigMap to obiekt API używany do przechowywania danych niepoufnych w postaci par klucz-wartość. Pody mogą wykorzystywać ConfigMapy jako zmienne środowiskowe, argumenty wiersza poleceń lub pliki konfiguracyjne w woluminie.
+
+ConfigMap umożliwia odseparowanie konfiguracji specyficznej dla środowiska od obrazów kontenerów, dzięki czemu aplikacje są łatwo przenośne.
+ConfigMap w tej aplikacji przechowuje dane konfiguracyjne, takie jak URL do MongoDB, które są używane przez backend.
+
+\begin{verbatim}
+    apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+  namespace: myforum-namespace
+data:
+  MONGO_URL: "mongodb://mongo:27017/viteForum"
+\end{verbatim}
+\\
+
+HorizontalPodAutoscaler automatycznie aktualizuje zasoby obciążenia (takie jak Deployment lub StatefulSet), aby automatycznie skalować obciążenie w celu dopasowania go do zapotrzebowania.
+
+Poziome skalowanie oznacza, że odpowiedzią na zwiększone obciążenie jest uruchamianie dodatkowych Podów. Różni się to od skalowania pionowego, które w kontekście Kubernetes oznaczałoby przypisanie większej ilości zasobów (na przykład pamięci lub CPU) do już działających Podów dla danego obciążenia.
+
+Jeśli obciążenie maleje, a liczba Podów jest powyżej skonfigurowanego minimum, HorizontalPodAutoscaler zleca zmniejszenie zasobów obciążenia (Deployment, StatefulSet lub inny podobny zasób).
+
+\\
+PersistentVolumeClaim (PVC) to żądanie zasobów magazynowych przez użytkownika. Jest podobne do Podów. Pody zużywają zasoby węzłów, a PVCs zużywają zasoby PV (PersistentVolume).
+
+Pody mogą żądać określonych poziomów zasobów (CPU i pamięć). Z kolei PVC może żądać określonej wielkości i trybów dostępu (na przykład mogą być montowane jako ReadWriteOnce, ReadOnlyMany, ReadWriteMany, lub ReadWriteOncePod). Dla tej aplikacji wykorzystane zostało ReadWriteOnce.
+
+\\
+
+W Kubernetes, Service (Usługa) jest metodą ekspozycji aplikacji sieciowej, która działa jako jeden lub więcej Podów w twoim klastrze.
+
+Kluczowym celem Service w Kubernetes jest to, że nie musisz modyfikować istniejącej aplikacji, aby używać nieznanej mechanizmu odkrywania usług. Możesz uruchamiać kod w Podach, czy to kod zaprojektowany dla świata chmurowego, czy starszą aplikację zkonteneryzowaną. Używasz Services do udostępnienia tego zestawu Podów w sieci, aby klienci mogli z nimi interakcjonować.
+\subsection{Zarządzanie błędami - 2 pkt}
+\label{sec:ERD} 
+
+Probes (Liveness i Readiness): Konfiguracja probes (np. HTTP probe) do monitorowania zdrowia aplikacji. W przypadku awarii lub problemów z dostępnością, Kubernetes może automatycznie restartować pod lub oznaczać je jako niegotowe.
+\\
+Dodatkowo zostały użyte metrics do automatycznego skalowania aplikacji w razie przekroczenia pewnych zasobów.
+
+\begin{verbatim}
+              livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+\end{verbatim}
+
+
+\subsection{Skalowalność - 4 pkt}
+\label{sec:ExamplesSection}
+
+W projekcie został użyty mechanizm Horizontal Pod Autoscaler (HPA) w celu automatycznego skalowania liczby replik podów w zależności od obciążenia. Każdy z dwóch komponentów (frontend i backend) został skonfigurowany z osobnym HPA, który monitoruje zużycie zasobów CPU i pamięci, dostosowując liczbę replik podów, aby utrzymać określony poziom wykorzystania zasobów.
+
+Dla backendu HPA skaluje liczbę podów od 1 do 5, starając się utrzymać średnie wykorzystanie CPU na poziomie 50 procent. Podobnie, dla frontendu HPA również skaluje liczbę podów od 1 do 5, dążąc do utrzymania średniego wykorzystania CPU na poziomie 50 procent.
+
+Monitorowanie skalowania przez HPA odbywa się w czasie rzeczywistym poprzez wykorzystanie wbudowanych metryk Kubernetes, które są zbierane przez Kubernetes Metrics Server. Decyzje o skalowaniu są podejmowane na podstawie tych metryk.
+
+HPA jest podstawowym narzędziem do skalowania podów w Kubernetes, dynamicznie dostosowującym liczbę replik w zależności od obciążenia, które jest mierzone przez metryki takie jak CPU i pamięć.
+
+\begin{verbatim}
+    apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-autoscaler
+  namespace: myforum-namespace
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+\end{verbatim}
+\begin{verbatim}
+    apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend-hpa
+  namespace: myforum-namespace
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+\end{verbatim}
+\subsection{Wymagania dotyczące zasobów - 2 pkt}
+\label{sec:ExampleTables}
+
+\begin{enumerate}
+    \item Backend
+        \begin{itemize}
+            \item CPU: Minimum 250 millicores (0.25 vCPU), limit 500 millicores (0.5 vCPU).
+            \item Pamięć RAM: Minimum 256 MiB, limit 512 MiB.
+            \item Miejsce na dysku: Backend nie wymaga dużego miejsca na dysku, ponieważ głównie działa jako aplikacja serwerowa obsługująca zapytania.
+            \item Czas odpowiedzi: Backend powinien szybko odpowiadać na zapytania HTTP, z odpowiednim czasem odpowiedzi poniżej 1 sekundy w normalnych warunkach.
+            \item Odporność na obciążenie: Dzięki użyciu Horizontal Pod Autoscaler (HPA), backend powinien dynamicznie skalować się w zależności od obciążenia, aby utrzymać stabilność i wydajność aplikacji
+        \end{itemize}
+    \item Frontend
+            \begin{itemize}
+            \item CPU: Minimum 250 millicores (0.25 vCPU), limit 500 millicores (0.5 vCPU).
+            \item Pamięć RAM: Minimum 256 MiB, limit 512 MiB.
+            \item Miejsce na dysku: Frontend wymaga miejsca na przechowywanie kodu źródłowego i zasobów aplikacji webowej, co może zająć około 100 MB.
+            \item Czas odpowiedzi: Frontend powinien szybko renderować interfejs użytkownika w przeglądarce, z minimalnym czasem ładowania strony dla użytkowników.
+            \item Odporność na obciążenie: Dzięki automatycznemu skalowaniu w Kubernetes, frontend powinien być w stanie obsługiwać rosnącą liczbę użytkowników bez utraty wydajności.
+        \end{itemize}
+    \item Database
+                \begin{itemize}
+            \item CPU: Minimalne wymagania CPU dla MongoDB są niskie, ale mogą być zależne od ilości zapytań i operacji na bazie danych.
+            \item Pamięć RAM: Minimalne wymagania RAM zależą od ilości danych przechowywanych i wydajności operacji zapisu/odczytu.
+            \item Miejsce na dysku: MongoDB wymaga przestrzeni dyskowej na przechowywanie danych, zgodnie z ustawionym limitem w PersistentVolumeClaim: 1GB.
+            \item Odpowiedź na zapytania: MongoDB powinien szybko odpowiadać na zapytania bazodanowe, z minimalnym czasem oczekiwania.
+            \item Stabilność i niezawodność: MongoDB wraz z PVC zapewniają stabilność danych, nawet w przypadku awarii pojedynczych podów.
+        \end{itemize}
+\end{enumerate}
+
+
+\subsection{Architektura sieciowa - 4 pkt}
+\label{sec:ExampleResults}
+
+Konfiguracja NetworkPolicy w Kubernetes, o nazwie allow-frontend-to-backend-and-backend-to-mongo, definiuje zasady bezpieczeństwa dla komunikacji między aplikacjami w klastrze. NetworkPolicy obejmuje pody oznaczone jako app: backend i określa, że mają one zezwolenie na przyjmowanie ruchu z pody app: frontend na porcie TCP 4000 (Ingress). Dodatkowo, pody backend mogą wysyłać ruch do pody app: frontend na porcie TCP 3000 oraz do pody app: mongo na porcie TCP 27017 (Egress). Ta konfiguracja precyzyjnie kontroluje komunikację między podami na podstawie ich etykiet, co jest kluczowe dla bezpieczeństwa i zarządzania siecią w środowisku Kubernetes.
+
+\begin{verbatim}
+    apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend-and-backend-to-mongo
+  namespace: myforum-namespace
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 4000
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 3000
+  - to:
+    - podSelector:
+        matchLabels:
+          app: mongo
+    ports:
+    - protocol: TCP
+      port: 27017
+
+\end{verbatim}
+
+\noindent
+
+
+\bibliographystyle{amsplain}
+\bibliography{references.bib}
+\nocite{*}
+
+\end{document}
